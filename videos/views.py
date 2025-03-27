@@ -5,13 +5,16 @@ from rest_framework.response import Response
 from rest_framework.parsers import MultiPartParser, FormParser
 from django.http import StreamingHttpResponse
 from django.conf import settings
+from django.views import View
+
+from django.shortcuts import render
 
 class ProcessVideoAPIView(APIView):
     parser_classes = (MultiPartParser, FormParser)
 
     def post(self, request, *args, **kwargs):
-        # if "video" not in request.FILES:
-        #     return Response({"error": "No video file provided"}, status=400)
+        if "file" not in request.FILES:
+            return Response({"error": "No video file provided"}, status=400)
         # return Response(status=200)
         video_file = request.FILES["file"]
         input_video_path = os.path.join(settings.MEDIA_ROOT, "uploads", video_file.name)
